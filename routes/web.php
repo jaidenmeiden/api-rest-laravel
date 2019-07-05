@@ -18,3 +18,15 @@ Route::get('/', function () {
 Route::get('/welcome', function () {
     return view('welcome');
 });
+
+Route::get('/parametros/{nombre?}', function ($nombre = null) {
+    $texto = '<h1>Texto en una ruta</h1>';
+    if($nombre != null) {
+        $texto .= 'Nombre ' . $nombre;
+    } else {
+        $texto .= 'No hay nombre';
+    }
+    return view('parametros', array(
+        'texto' => $texto
+    ));
+});
