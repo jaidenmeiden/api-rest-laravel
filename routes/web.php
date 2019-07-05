@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/', function () {
+Route::get('/holamundo', function () {
     return '<h1>Hola mundo con laravel</h1>';
 });
 
