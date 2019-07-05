@@ -30,3 +30,5 @@ Route::get('/parametros/{nombre?}', function ($nombre = null) {
         'texto' => $texto
     ));
 });
+
+Route::get('/animales', 'PruebasController@index');
