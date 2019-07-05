@@ -12,5 +12,9 @@
 */
 
 Route::get('/', function () {
+    return '<h1>Hola mundo con laravel</h1>';
+});
+
+Route::get('/welcome', function () {
     return view('welcome');
 });
