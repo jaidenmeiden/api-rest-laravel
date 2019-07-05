@@ -65,5 +65,5 @@ Route::get('/post/prueba', 'PostController@pruebas');
  * Para poder acceder a dicha ruta se debe llamr desde un formulario HTML
  * o un cliente REST o cliente RESTful
  */
-Route::post('/api/users/register', 'UserController@pruebas');
+Route::post('/api/users/register', 'UserController@register');
 Route::post('/api/users/login', 'UserController@login');
