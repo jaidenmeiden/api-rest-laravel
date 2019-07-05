@@ -11,6 +11,7 @@
 |
 */
 
+//Rutas de pruebas Framework
 Route::get('/holamundo', function () {
     return '<h1>Hola mundo con laravel</h1>';
 });
@@ -19,7 +20,7 @@ Route::get('/welcome', function () {
     return view('welcome');
 });
 
-Route::get('/parametros/{nombre?}', function ($nombre = null) {
+Route::get('/pruebas/parametros/{nombre?}', function ($nombre = null) {
     $texto = '<h1>Texto en una ruta</h1>';
     if($nombre != null) {
         $texto .= 'Nombre ' . $nombre;
@@ -31,6 +32,38 @@ Route::get('/parametros/{nombre?}', function ($nombre = null) {
     ));
 });
 
-Route::get('/animales', 'PruebasController@index');
-Route::get('/posts', 'PruebasController@getPosts');
-Route::get('/categories', 'PruebasController@getCategories');
+Route::get('/pruebas/animales', 'PruebasController@index');
+Route::get('/pruebas/posts', 'PruebasController@getPosts');
+Route::get('/pruebas/categories', 'PruebasController@getCategories');
+
+//Rutas del API
+
+/*
+ * Metodos HTTP comunes
+ *
+ * GET: Conseguir datos o recursos
+ * POST: Guardar datos o recursos o hacer logica desde un formulario
+ * PUT: Actualizar datos o recursos
+ * DELETE: Eliminar datos o recursos
+ *
+ * API REST: Solo utiliza GET y POST
+ *
+ * API RESTful: Utiliza todos los metodos HTTP
+ *
+ */
+
+//Rutas de pruebas Controladores
+Route::get('/user/prueba', 'UserController@pruebas');
+Route::get('/category/prueba', 'CategoryController@pruebas');
+Route::get('/post/prueba', 'PostController@pruebas');
+
+//Rutas del controlador de usuario
+/*
+ * No se puede acceder a las rutas POST desde el navegador, ya
+ * que este tipo de acceso es GET y la petición es POST.
+ *
+ * Para poder acceder a dicha ruta se debe llamr desde un formulario HTML
+ * o un cliente REST o cliente RESTful
+ */
+Route::post('/api/users/register', 'UserController@pruebas');
+Route::post('/api/users/login', 'UserController@login');
