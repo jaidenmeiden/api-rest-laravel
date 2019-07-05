@@ -32,3 +32,5 @@ Route::get('/parametros/{nombre?}', function ($nombre = null) {
 });
 
 Route::get('/animales', 'PruebasController@index');
+Route::get('/posts', 'PruebasController@getPosts');
+Route::get('/categories', 'PruebasController@getCategories');

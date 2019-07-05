@@ -10,11 +10,11 @@ class Post extends Model
 
     //Relación de muchos  a uno
     public function user() {
-        return $this->belongsTo('App\User', 'idusers');
+        return $this->belongsTo('App\User', 'user_id');
     }
 
     //Relación de muchos  a uno
     public function category() {
-        return $this->belongsTo('App\Category', 'idcategories');
+        return $this->belongsTo('App\Category', 'category_id');
     }
 }
