@@ -56,9 +56,9 @@ Route::get('/pruebas/categories', 'PruebasController@getCategories');
  */
 
 //Rutas de pruebas Controladores
-Route::get('/user/prueba', 'UserController@pruebas');
-Route::get('/category/prueba', 'CategoryController@pruebas');
-Route::get('/post/prueba', 'PostController@pruebas');
+//Route::get('/user/prueba', 'UserController@pruebas');
+//Route::get('/category/prueba', 'CategoryController@pruebas');
+//Route::get('/post/prueba', 'PostController@pruebas');
 
 //Rutas del controlador de usuario
 /*
@@ -68,9 +68,12 @@ Route::get('/post/prueba', 'PostController@pruebas');
  * Para poder acceder a dicha ruta se debe llamr desde un formulario HTML
  * o un cliente REST o cliente RESTful
  */
-Route::post('/api/users/register', 'UserController@register');
-Route::post('/api/users/login', 'UserController@login');
-Route::put('/api/users/update', 'UserController@update');
-Route::post('/api/users/upload', 'UserController@upload')->middleware(ApiAuthMiddleware::class);
-Route::get('/api/users/avatar/{filename}', 'UserController@getImage');
-Route::get('/api/users/detail/{id}', 'UserController@detail');
+Route::post('/api/user/register', 'UserController@register');
+Route::post('/api/user/login', 'UserController@login');
+Route::put('/api/user/update', 'UserController@update');
+Route::post('/api/user/upload', 'UserController@upload')->middleware(ApiAuthMiddleware::class);
+Route::get('/api/user/avatar/{filename}', 'UserController@getImage');
+Route::get('/api/user/detail/{id}', 'UserController@detail');
+
+//Rutas del controlador de categorías
+Route::resource('/api/category', 'CategoryController');
