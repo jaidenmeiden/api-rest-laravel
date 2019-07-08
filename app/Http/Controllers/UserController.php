@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
 
@@ -37,7 +38,7 @@ class UserController extends Controller
             $validate = \Validator::make($params_array, [
                 'name' => 'required|alpha',
                 'surname' => 'required|alpha',
-                'email' => 'required|email',
+                'email' => 'required|email|unique:users',
                 'password' => 'required ',
             ]);
 
@@ -50,13 +51,30 @@ class UserController extends Controller
                 );
             } else {
                 //4. Cifrar la contraseña
-                //5. Comprobar si el suario existe ya (Duplicado)
+                $pwd = password_hash($params->password, PASSWORD_BCRYPT, ['cost' => 4]);
+
+                //5. Comprobar si el usuario existe ya (Duplicado)
+                //En validador al colocar la instrucción 'unique:users', se específica
+                //que campo debe ser unico y en que tabla. Con esto se comprueba si un
+                //usuario existe y si existe da un error de validación.
+
+
                 //6. Crear el usuario
+                $user = new User();
+                $user->name = $params_array['name'];
+                $user->surname = $params_array['surname'];
+                $user->email = $params_array['email'];
+                $user->password = $pwd;
+                $user->role = 'ROLE_USER';
+
+                //7. Guardar usuario
+                $user->save();
 
                 $data = array(
                     'status' => 'success',
                     'code' => 200,
-                    'message' => 'El usuario se ha creado correctamente'
+                    'message' => 'El usuario se ha creado correctamente',
+                    'user' => $user
                 );
             }
         } else {
