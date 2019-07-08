@@ -6,6 +6,7 @@ use App\Helpers\JwtAuth;
 use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class UserController extends Controller
 {
@@ -131,12 +132,63 @@ class UserController extends Controller
         $jwtAuth = new JwtAuth();
         $checkToken = $jwtAuth->checkToken($token);
 
-        if($checkToken) {
-            echo "<h1>Loging correcto</h1>";
+        //1. Recoger los datos por POST
+        $json = $request->input('json', null);
+        $params_array = json_decode($json, true);//Array
+
+        if($checkToken && !empty($params_array)) {
+            //2. Sacar usuario identificado
+            $user = $jwtAuth->checkToken($token, true);
+
+            //3. Validar datos
+            $validate = \Validator::make($params_array, [
+                'name' => 'required|alpha',
+                'surname' => 'required|alpha',
+                'email' => [
+                    'required',
+                    'email',
+                    Rule::unique('users')->ignore($user->sub)
+                ]
+            ]);
+            //Nota:
+            //Al concatenear el 'sub' (llave primaria ó ID) se valida que el email no exista
+            //en registros diferentes al que se esta actualizando.
+
+            //4. Quitar los campos que no quiero actualizar
+            unset($params_array['id']);
+            unset($params_array['role']);
+            unset($params_array['password']);
+            unset($params_array['created_at']);
+            unset($params_array['remember_token']);
+
+            if($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'El usuario no existe en el sistema',
+                    'errors' => $validate->errors()
+                );
+            } else {
+                //5. Actualizar usuario en base de datos
+                User::where('id', $user->sub)->update($params_array);
+                //5. Devolver array con resultado
+                $data = array(
+                    'status' => 'success',
+                    'code' => 200,
+                    'message' => 'El usuario se ha actualizado correctamente',
+                    'user' => $user,
+                    'changes' => $params_array,
+                );
+            }
+
         } else {
-            echo "<h1>Loging incorrecto</h1>";
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'El usuario no está identificado'
+            );
         }
 
-        die();
+        return response()->json($data, $data['code']);
     }
 }
