@@ -12,12 +12,12 @@
 */
 
 //Rutas de pruebas Framework
-Route::get('/holamundo', function () {
-    return '<h1>Hola mundo con laravel</h1>';
-});
-
 Route::get('/welcome', function () {
     return view('welcome');
+});
+
+Route::get('/holamundo', function () {
+    return '<h1>Hola mundo con laravel</h1>';
 });
 
 Route::get('/pruebas/parametros/{nombre?}', function ($nombre = null) {
