@@ -68,3 +68,4 @@ Route::get('/post/prueba', 'PostController@pruebas');
 Route::post('/api/users/register', 'UserController@register');
 Route::post('/api/users/login', 'UserController@login');
 Route::put('/api/users/update', 'UserController@update');
+Route::post('/api/users/upload', 'UserController@upload');
