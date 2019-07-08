@@ -49,29 +49,37 @@ class CategoryController extends Controller
         $json = $request->input('json', null);
         $params_array = json_decode($json, true);//Array
 
-        //2. Validar los datos
-        $validate = \Validator::make($params_array, [
-            'name' => 'required',
-        ]);
+        if(!empty($params_array)) {
+            //2. Validar los datos
+            $validate = \Validator::make($params_array, [
+                'name' => 'required',
+            ]);
 
-        //2. Validar la contraseña
-        if($validate->fails()) {
+            //2. Validar la contraseña
+            if($validate->fails()) {
+                $data = array(
+                    'status' => 'error',
+                    'code' => 404,
+                    'message' => 'No se ha guardado la categoría'
+                );
+            } else {
+                //3. Guardar la categoría
+                $category = new Category();
+                $category->name = $params_array['name'];
+                $category->save();
+
+                //4. Devolver resultado
+                $data = array(
+                    'code' => 200,
+                    'status' => 'success',
+                    'category' => $category
+                );
+            }
+        } else {
             $data = array(
                 'status' => 'error',
                 'code' => 404,
-                'message' => 'No se ha guardado la categoría'
-            );
-        } else {
-            //3. Guardar la categoría
-            $category = new Category();
-            $category->name = $params_array['name'];
-            $category->save();
-
-            //4. Devolver resultado
-            $data = array(
-                'code' => 200,
-                'status' => 'success',
-                'category' => $category
+                'message' => 'No has enviado ninguna categoria'
             );
         }
 
