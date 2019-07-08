@@ -98,7 +98,6 @@ class UserController extends Controller
         $json = $request->input('json', null);
         $params = json_decode($json);//Objeto
         $params_array = json_decode($json, true);//Array
-        var_dump($params_array);
 
         $validate = \Validator::make($params_array, [
             'email' => 'required|email',
@@ -125,5 +124,19 @@ class UserController extends Controller
         }
 
         return response()->json($signup, 200);
+    }
+
+    public function update(Request $request) {
+        $token = $request->header('Authorization');
+        $jwtAuth = new JwtAuth();
+        $checkToken = $jwtAuth->checkToken($token);
+
+        if($checkToken) {
+            echo "<h1>Loging correcto</h1>";
+        } else {
+            echo "<h1>Loging incorrecto</h1>";
+        }
+
+        die();
     }
 }
