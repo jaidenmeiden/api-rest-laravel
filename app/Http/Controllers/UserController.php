@@ -94,11 +94,36 @@ class UserController extends Controller
 
         $jwtAuth = new \JwtAuth();
 
+        //1. Recibir datos por POST
+        $json = $request->input('json', null);
+        $params = json_decode($json);//Objeto
+        $params_array = json_decode($json, true);//Array
+        var_dump($params_array);
 
-        $email = "jaidenmeiden@gmail.com";
-        $password = "jaiden";
-        $pwd = hash('sha256', $password);
+        $validate = \Validator::make($params_array, [
+            'email' => 'required|email',
+            'password' => 'required ',
+        ]);
 
-        return response()->json($jwtAuth->singup($email, $pwd, true), 200);
+        //2. Validar la contraseña
+        if($validate->fails()) {
+            $signup = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'El usuario no se ha podido identificar',
+                'errors' => $validate->errors()
+            );
+        } else {
+            //3. Cifrar la contraseña
+            $pwd = hash('sha256', $params->password);
+
+            //4. Devolver token o datos
+            $signup = $jwtAuth->singup($params->email, $pwd);
+            if(!empty($params->gettoken)) {
+                $signup = $jwtAuth->singup($params->email, $pwd, true);
+            }
+        }
+
+        return response()->json($signup, 200);
     }
 }
