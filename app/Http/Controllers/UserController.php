@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Helpers\JwtAuth;
 use App\User;
 use http\Env\Response;
 use Illuminate\Http\Request;
@@ -89,6 +90,11 @@ class UserController extends Controller
     }
 
     public function login(Request $request) {
+        //Se lama al servicio JwtAuth
 
+        $jwtAuth = new \JwtAuth();
+
+
+        return $jwtAuth->singup();
     }
 }
