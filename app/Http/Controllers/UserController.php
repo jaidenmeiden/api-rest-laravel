@@ -52,7 +52,7 @@ class UserController extends Controller
                 );
             } else {
                 //4. Cifrar la contraseña
-                $pwd = password_hash($params->password, PASSWORD_BCRYPT, ['cost' => 4]);
+                $pwd = hash('sha256', $params->password);
 
                 //5. Comprobar si el usuario existe ya (Duplicado)
                 //En validador al colocar la instrucción 'unique:users', se específica
@@ -95,6 +95,10 @@ class UserController extends Controller
         $jwtAuth = new \JwtAuth();
 
 
-        return $jwtAuth->singup();
+        $email = "jaidenmeiden@gmail.com";
+        $password = "jaiden";
+        $pwd = hash('sha256', $password);
+
+        return response()->json($jwtAuth->singup($email, $pwd, true), 200);
     }
 }
