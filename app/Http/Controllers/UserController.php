@@ -4,8 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Helpers\JwtAuth;
 use App\User;
-use http\Env\Response;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Validation\Rule;
 
 class UserController extends Controller
@@ -220,5 +220,24 @@ class UserController extends Controller
         }
 
         return response()->json($data, $data['code']);
+    }
+
+    public function getImage($filename) {
+        $isset = \Storage::disk('users')->exists($filename);
+
+        if($isset) {
+            $file = \Storage::disk('users')->get($filename);
+
+            return new Response($file, 200);
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'La imagen no existe'
+            );
+
+            return response()->json($data, $data['code']);
+        }
+
     }
 }
