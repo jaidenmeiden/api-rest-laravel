@@ -73,7 +73,7 @@ class PostController extends Controller
                     'message' => 'No se ha guardado el post'
                 );
             } else {
-                //3. Guardar el post
+                //5. Guardar el post
                 $post = new Post();
                 $post->title = $params_array['title'];
                 $post->content = $params_array['content'];
@@ -82,7 +82,7 @@ class PostController extends Controller
                 $post->image = $params->image;
                 $post->save();
 
-                //4. Devolver resultado
+                //6. Devolver resultado
                 $data = array(
                     'code' => 200,
                     'status' => 'success',
@@ -99,5 +99,55 @@ class PostController extends Controller
 
         return \response()->json($data, $data['code']);
     }
+
+    public function update($id, Request $request) {
+        //1. Recoger los datos por post
+        $json = $request->input('json', null);
+        $params = json_decode($json);//Object
+        $params_array = json_decode($json, true);//Array
+
+        $data = array(
+            'status' => 'error',
+            'code' => 404,
+            'message' => 'No has enviado ningún post'
+        );
+
+        if(!empty($params_array)) {
+            //2. Conseguir usuario identificado
+            $jwtAuth = new JwtAuth();
+            $token = $request->header('Authorization', null);
+
+            //3. Validar los datos
+            $validate = \Validator::make($params_array, [
+                'title' => 'required',
+                'content' => 'required',
+                'category_id' => 'required',
+                'image' => 'required',
+            ]);
+
+            //4. Quitar lo que no quiero actualizar
+            unset($params_array['id']);
+            unset($params_array['user_id']);
+            unset($params_array['created_at']);
+
+            if($validate->fails()) {
+                $data['errors'] = $validate->errors();
+                return response()->json($data, $data['code']);
+            } else {
+                //5. Actualizar el registro
+                $post = Post::where('id', $id)->update($params_array);
+
+                //4. Devolver resultado
+                $data = array(
+                    'code' => 200,
+                    'status' => 'success',
+                    'category' => $params_array
+                );
+            }
+        }
+
+        return \response()->json($data, $data['code']);
+    }
+
 
 }
