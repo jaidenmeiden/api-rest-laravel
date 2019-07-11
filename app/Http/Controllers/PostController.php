@@ -192,4 +192,34 @@ class PostController extends Controller
         $token = $request->header('Authorization', null);
         return $jwtAuth->checkToken($token, true);
     }
+
+    public function upload(Request $request) {
+        //1. Recoger los datos de la petición
+        $image = $request->file('file0');
+
+        $validate = \Validator::make($request->all(), [
+            'file0' => 'required|image|mimes:jpeg,jpg,bmp,png',
+        ]);
+
+        //2. Guardar la imagen
+        if(!$image || $validate->fails()) {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'Error al subir imagen'
+            );
+        } else {
+            $image_name = time().$image->getClientOriginalName();
+            \Storage::disk('images')->put($image_name, \File::get($image));
+
+            //3. Devolver el resultado
+            $data = array(
+                'code' => 200,
+                'status' => 'success',
+                'image' => $image_name
+            );
+        }
+
+        return response()->json($data, $data['code']);
+    }
 }
