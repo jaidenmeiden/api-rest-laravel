@@ -145,5 +145,28 @@ class PostController extends Controller
         return \response()->json($data, $data['code']);
     }
 
+    public function destroy($id, Request $request) {
+        //1. Conseguir el post
+        $post = Post::find($id);
 
+        if(is_object($post)) {
+            //2. Borrarlo
+            $post->delete();
+
+            //3. Devolver algo
+            $data = array(
+                'code' => 200,
+                'status' => 'success',
+                'category' => $post
+            );
+        } else {
+            $data = array(
+                'status' => 'error',
+                'code' => 404,
+                'message' => 'El post no existe'
+            );
+        }
+
+        return response()->json($data, $data['code']);
+    }
 }

@@ -111,7 +111,7 @@ class CategoryController extends Controller
                 //4. Actualizar el registro
                 $category = Category::where('id', $id)->update($params_array);
 
-                //4. Devolver resultado
+                //5. Devolver resultado
                 $data = array(
                     'code' => 200,
                     'status' => 'success',
