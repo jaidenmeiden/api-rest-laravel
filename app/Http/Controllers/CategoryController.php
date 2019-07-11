@@ -115,7 +115,8 @@ class CategoryController extends Controller
                 $data = array(
                     'code' => 200,
                     'status' => 'success',
-                    'category' => $params_array
+                    'category' => $category,
+                    'changes' => $params_array
                 );
             }
         } else {

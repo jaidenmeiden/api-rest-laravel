@@ -103,7 +103,6 @@ class PostController extends Controller
     public function update($id, Request $request) {
         //1. Recoger los datos por post
         $json = $request->input('json', null);
-        $params = json_decode($json);//Object
         $params_array = json_decode($json, true);//Array
 
         $data = array(
@@ -113,10 +112,6 @@ class PostController extends Controller
         );
 
         if(!empty($params_array)) {
-            //2. Conseguir usuario identificado
-            $jwtAuth = new JwtAuth();
-            $token = $request->header('Authorization', null);
-
             //3. Validar los datos
             $validate = \Validator::make($params_array, [
                 'title' => 'required',
@@ -135,13 +130,14 @@ class PostController extends Controller
                 return response()->json($data, $data['code']);
             } else {
                 //5. Actualizar el registro
-                $post = Post::where('id', $id)->update($params_array);
+                $post = Post::where('id', $id)->updateOrCreate($params_array);
 
                 //4. Devolver resultado
                 $data = array(
                     'code' => 200,
                     'status' => 'success',
-                    'category' => $params_array
+                    'post' => $post,
+                    'changes' => $params_array
                 );
             }
         }
