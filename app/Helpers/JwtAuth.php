@@ -35,15 +35,15 @@ class JwtAuth {
                 'name' => $user->name,
                 'surname' => $user->surname,
                 'iat' => time(), //El tiempo en que fue creado el token
-                'exp' => time() + (7 * 24 * 60 * 60) //Cuando expira el token (Una semana)
+                    'exp' => time() + (7 * 24 * 60 * 60) //Cuando expira el token (Una semana)
             );
 
             $jwt = JWT::encode($token, $this->key, 'HS256');
-            $decoded = JWT::decode($jwt, $this->key, ['HS256']);
 
             if(is_null($getToken)) {
                 $data = $jwt;
             } else {
+                $decoded = JWT::decode($jwt, $this->key, ['HS256']);
                 $data = $decoded;
             }
         } else {
