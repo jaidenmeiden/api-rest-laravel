@@ -27,7 +27,7 @@ class PostController extends Controller
         return response()->json([
             'code' => 200,
             'status' => 'success',
-            'categories' => $posts
+            'posts' => $posts
         ], 200);
     }
 
@@ -38,7 +38,7 @@ class PostController extends Controller
             $data = array(
                 'code' => 200,
                 'status' => 'success',
-                'category' => $post
+                'post' => $post
             );
         } else {
             $data = array(
@@ -90,7 +90,7 @@ class PostController extends Controller
                 $data = array(
                     'code' => 200,
                     'status' => 'success',
-                    'category' => $post
+                    'post' => $post
                 );
             }
         } else {
@@ -180,7 +180,7 @@ class PostController extends Controller
             $data = array(
                 'code' => 200,
                 'status' => 'success',
-                'category' => $post
+                'post' => $post
             );
         } else {
             $data = array(
